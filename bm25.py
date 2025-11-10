@@ -60,7 +60,7 @@ class BM25(RetrievalModel):
         self.save_model()
 
 
-    def search(self, query, k):
+    def search(self, query, k, return_scores=False):
         """
         This method will be called by us for the validation stage and or you can call it for evaluating your code 
         on your own splits on top of the training sets seen to you
@@ -70,4 +70,7 @@ class BM25(RetrievalModel):
         """
         ## TODO write your code here (and change return)
         # Sadra: will use the `retriv` instead
-        return SearchEngine.load(self.index_file).search(query=query, cutoff=k)
+        retrieved = SearchEngine.load(self.index_file).search(query=query, cutoff=k)
+        if return_scores:
+            return retrieved
+        return [doc['text'] for doc in retrieved]
