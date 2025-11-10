@@ -2,6 +2,7 @@ import argparse
 from ollama_generator import *
 from huggingface_generator import *
 from bm25 import * 
+from tfidf import *
 from tqdm import tqdm
 
 def get_arguments():
@@ -24,6 +25,8 @@ if __name__ == "__main__":
 
     if args.r == "bm25":
         retriever = BM25(args.n).load_model()
+    elif args.r == "tfidf":
+        retriever = TFIDF(args.n).load_model()
     else:
         # TODO add at least one more retriever
         retriever = None
@@ -43,7 +46,6 @@ if __name__ == "__main__":
         docs = retriever.search(q, int(args.k))
         answer = generator.query(docs, q)
         answers.append(answer)
-        break
     
     with open(args.o, 'w') as f:
         for a in answers:
