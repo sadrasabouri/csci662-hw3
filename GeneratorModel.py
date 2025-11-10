@@ -1,8 +1,16 @@
 from abc import ABCMeta, abstractmethod
 
 # TODO define prompt(s)
-PROMPT = """
-<you should define this prompt>
+PROMPT_WO_DOCS = """
+Answer the following question:
+Q: {question}
+"""
+PROMPT_W_DOCS = """
+Based on the following text:
+<text>
+{retrieved_documents}
+</text>
+{PROMPT_WO_DOCS}
 """
 
 class GeneratorModel(object, metaclass=ABCMeta):

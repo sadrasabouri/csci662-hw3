@@ -17,8 +17,10 @@ class HFModel(GeneratorModel):
 		self.model = AutoModelForCausalLM.from_pretrained(model_name)
 
 	def query(self, retrieved_documents, question):
-		retrieved_documents_str = '\n'.join(retrieved_documents)
-		prompt = PROMPT.format(retrieved_documents=retrieved_documents_str, question=question)
+		prompt = PROMPT_WO_DOCS.format(question=question)
+		if len(retrieved_documents) > 0:
+			retrieved_documents_str = '\n'.join(retrieved_documents)
+			prompt = PROMPT_W_DOCS.format(retrieved_documents=retrieved_documents_str, question=question)
 		
 		# Tokenize the prompt and attend to all tokens
 		inputs = self.tokenizer(prompt, return_tensors="pt", truncation=True, max_length=1024)
