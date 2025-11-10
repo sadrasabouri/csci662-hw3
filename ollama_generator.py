@@ -21,7 +21,7 @@ class OllamaModel(GeneratorModel):
 	def query(self, retrieved_documents, question):
 		prompt = PROMPT_WO_DOCS.format(question=question)
 		if len(retrieved_documents) > 0:
-			retrieved_documents_str = '\n'.join(retrieved_documents)
+			retrieved_documents_str = '\n'.join([f"<doc_{i}>{x}</doc_{i}>" for i, x in enumerate(retrieved_documents)])
 			prompt = PROMPT_W_DOCS.format(retrieved_documents=retrieved_documents_str, question=question)
 		print(len(prompt.split()))
 		response = ollama.chat(model=self.model_name, messages=[{

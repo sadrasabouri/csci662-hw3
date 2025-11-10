@@ -19,9 +19,9 @@ class HFModel(GeneratorModel):
 	def query(self, retrieved_documents, question):
 		prompt = PROMPT_WO_DOCS.format(question=question)
 		if len(retrieved_documents) > 0:
-			retrieved_documents_str = '\n'.join(retrieved_documents)
+			retrieved_documents_str = '\n'.join([f"<doc_{i}>{x}</doc_{i}>" for i, x in enumerate(retrieved_documents)])
 			prompt = PROMPT_W_DOCS.format(retrieved_documents=retrieved_documents_str, question=question)
-		
+		print(prompt)
 		# Tokenize the prompt and attend to all tokens
 		inputs = self.tokenizer(prompt, return_tensors="pt", truncation=True, max_length=1024)
 		attention_mask = inputs["input_ids"].ne(self.tokenizer.pad_token_id).long()
