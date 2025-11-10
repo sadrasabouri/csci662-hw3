@@ -29,7 +29,7 @@ if __name__ == "__main__":
         retriever = None
 
     if args.p == 'ollama':
-        generator = OllamaModel(model_file=args.m)
+        generator = OllamaModel(model_name=args.m)
     elif args.p in ['HuggingFace', 'huggingface', 'hf', 'HF']:
         generator = HFModel(args.m)
 
@@ -40,11 +40,12 @@ if __name__ == "__main__":
     answers = []
     questions = open(args.i).read().strip().splitlines()
     for q in tqdm(questions, desc="Answering questions with RAG", unit="question"):
-        docs = retriever.search(q, args.k)
+        docs = retriever.search(q, int(args.k))
         answer = generator.query(docs, q)
         answers.append(answer)
+        break
     
-    with open(args.o) as f:
+    with open(args.o, 'w') as f:
         for a in answers:
             # Replace newlines in the answer with a space
             single_line_answer = a.replace('\n', ' ')
