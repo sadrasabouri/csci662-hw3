@@ -1,5 +1,4 @@
-
-
+import re
 import argparse
 
 if __name__ == "__main__":
@@ -24,6 +23,11 @@ if __name__ == "__main__":
             gold_item = gold_item.replace('"', '')
             if gold_item == '':
                 continue
+
+            # get the answer out out if the xml tags
+            pred_answer = re.search(r"<answer>(.*?)</answer>", pred, re.DOTALL)
+            if pred_answer:
+                pred = pred_answer.group(1).strip()
 
             if gold_item in pred:
                 correct += 1
