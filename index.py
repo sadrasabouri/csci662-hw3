@@ -28,6 +28,10 @@ def get_arguments():
 if __name__ == "__main__":
     args = get_arguments()
 
+    if args.stopwords == "none":
+        args.stopwords = None
+    if args.stemmer == "none":
+        args.stemmer = None
     if "bm25" in args.m:
         model = BM25(model_file=args.o, b=args.bm25_b, k=args.bm25_k, parameters={
             'min_df': args.min_df,
