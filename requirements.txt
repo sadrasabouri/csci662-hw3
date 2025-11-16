@@ -1,3 +1,4 @@
 retriv
 ollama
 sentence_transformers
+tqdm
