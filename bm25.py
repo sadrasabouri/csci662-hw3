@@ -6,11 +6,15 @@
  You are NOT required to do this from scratch
  You are allowed to use libraries like retriv
 """
+from tqdm import tqdm
 import json
 from retriv import SearchEngine
 from RetrievalModel import *
 
 class BM25(RetrievalModel):
+    """
+    The retrier class which index sentences using BM25 method using Retriv library.
+    """
     def __init__(self, model_file, b=.75, k=1.2, parameters={}):
         self.model_file = model_file
         self.b = b
@@ -74,3 +78,17 @@ class BM25(RetrievalModel):
         if return_scores:
             return retrieved
         return [doc['text'] for doc in retrieved]
+
+    def search_batch(self, queries, k, return_scores=False):
+        """
+        This method will be called by us for the validation stage and or you can call it for evaluating your code 
+        on your own splits on top of the training sets seen to you
+        :param queries: list of queries to run against bm25 retrieval index
+        :param k: the number of retrieval results
+        :return: predictions list
+        """
+        results = []
+        for query in tqdm(queries, desc="Searching batch"):
+            retrieved = self.search(query, k, return_scores)
+            results.append(retrieved)
+        return results

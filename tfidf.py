@@ -1,11 +1,15 @@
 """
  Using Retriv library for TF-IDF
 """
+from tqdm import tqdm
 import json
 from retriv import SearchEngine
 from RetrievalModel import *
 
 class TFIDF(RetrievalModel):
+    """
+    The retrier class which index sentences using Term Frequency Inverse Document Frequency (TF-IDF) using Retriv library.
+    """
     def __init__(self, model_file, parameters={}):
         self.model_file = model_file
         self.min_df = parameters.get('min_df', 1)
@@ -65,3 +69,17 @@ class TFIDF(RetrievalModel):
         if return_scores:
             return retrieved
         return [doc['text'] for doc in retrieved]
+
+    def search_batch(self, queries, k, return_scores=False):
+        """
+        This method will be called by us for the validation stage and or you can call it for evaluating your code 
+        on your own splits on top of the training sets seen to you
+        :param queries: list of queries to run against tfidf retrieval index
+        :param k: the number of retrieval results
+        :return: predictions list
+        """
+        results = []
+        for query in tqdm(queries, desc="Searching batch"):
+            retrieved = self.search(query, k, return_scores)
+            results.append(retrieved)
+        return results
