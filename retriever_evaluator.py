@@ -16,6 +16,7 @@ def get_arguments():
     parser.add_argument("-k", help="top k: the number of documents to return in each retrieval run.")
 
     parser.add_argument("-q", help="question files")
+    parser.add_argument("-o", help="output file name to include hte final statistics")
     return parser.parse_args()
 
 if __name__ == "__main__":
@@ -59,5 +60,6 @@ if __name__ == "__main__":
         scores['f1'].append(f1_at_k)
         print(jenson_sim, precision_at_k, recall_at_k, f1_at_k)
 
-    for k, v in scores.items():
-        print(f"avg-{k}@{args.k}: {sum(v) / len(v)}")
+    with open(args.o, 'w') as f:
+        for k, v in scores.items():
+            f.write(f"avg-{k}@{args.k}: {sum(v) / len(v)}\n")
