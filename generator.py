@@ -3,6 +3,7 @@ from ollama_generator import *
 from huggingface_generator import *
 from bm25 import * 
 from tfidf import *
+from st_se import *
 from tqdm import tqdm
 
 def get_arguments():
@@ -27,6 +28,8 @@ if __name__ == "__main__":
         retriever = BM25(args.n).load_model()
     elif args.r == "tfidf":
         retriever = TFIDF(args.n).load_model()
+    elif args.r == "st_se":
+        retriever = SentenceTransformersSentenceEmbedding(args.n).load_model()
     else:
         # TODO add at least one more retriever
         retriever = None

@@ -3,8 +3,12 @@ from tqdm import tqdm
 import argparse
 from bm25 import * 
 from tfidf import *
+from st_se import *
 
 def get_arguments():
+    """
+    Return the arguments for the evaluator main module.
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument('-r', default="bm25", help="retriever model: name of the retriever model you used.")
     parser.add_argument("-n", help="index name: the name of the index that you created with 'index.py'.")
@@ -21,6 +25,8 @@ if __name__ == "__main__":
         retriever = BM25(args.n).load_model()
     elif args.r == "tfidf":
         retriever = TFIDF(args.n).load_model()
+    elif args.r == "st_se":
+        retriever = SentenceTransformersSentenceEmbedding(args.n).load_model()
     else:
         # TODO add at least one more retriever
         retriever = None
@@ -33,8 +39,9 @@ if __name__ == "__main__":
         'recall': [],
         'f1': []
     }
-    for q in tqdm(questions, desc="Answering questions", unit="question"):
-        docs = retriever.search(q['question'], int(args.k), return_scores=True)
+    # use the search_batch method if you implemented it for faster evaluation
+    retrieved_batches = retriever.search_batch([q['question'] for q in questions], int(args.k), return_scores=True)
+    for q, docs in zip(tqdm(questions, desc="Answering questions", unit="question"), retrieved_batches):
         pred_doc_ids = [doc['id'] for doc in docs]
         act_doc_ids = [x['id'] for x in q['documents']]
         pred_doc_ids_set = set(pred_doc_ids)

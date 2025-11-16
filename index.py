@@ -2,6 +2,7 @@ import os
 import argparse
 from bm25 import *
 from tfidf import *
+from st_se import *
 
 def get_arguments():
     # Please do not change the naming of these command line options or delete them. You may add other options for other hyperparameters but please provide with that the default values you used
@@ -42,6 +43,17 @@ if __name__ == "__main__":
     elif "tfidf" in args.m:
         model = TFIDF(model_file=args.o, parameters={
             'min_df': args.min_df,
+            'tokenizer': args.tokenizer,
+            'stemmer': args.stemmer,
+            'stopwords': args.stopwords,
+            'do_lowercasing': args.do_lowercasing,
+            'do_ampersand_normalization': args.do_ampersand_normalization,
+            'do_acronyms_normalization': args.do_acronyms_normalization,
+            'do_punctuation_removal': args.do_punctuation_removal,
+            'do_special_chars_normalization': args.do_special_chars_normalization
+        })
+    elif "st_se" in args.m:
+        model = SentenceTransformersSentenceEmbedding(model_file=args.o, parameters={
             'tokenizer': args.tokenizer,
             'stemmer': args.stemmer,
             'stopwords': args.stopwords,
