@@ -63,3 +63,4 @@ if __name__ == "__main__":
     with open(args.o, 'w') as f:
         for k, v in scores.items():
             f.write(f"avg-{k}@{args.k}: {sum(v) / len(v)}\n")
+            print(f"avg-{k}@{args.k}: {sum(v) / len(v)}\n")
