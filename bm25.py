@@ -74,6 +74,8 @@ class BM25(RetrievalModel):
         """
         ## TODO write your code here (and change return)
         # Sadra: will use the `retriv` instead
+        if k == 0:
+            return []
         retrieved = SearchEngine.load(self.index_file).search(query=query, cutoff=k)
         if return_scores:
             return retrieved

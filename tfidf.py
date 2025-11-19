@@ -63,6 +63,8 @@ class TFIDF(RetrievalModel):
         :param k: the number of retrieval results
         :return: predictions list
         """
+        if k == 0:
+            return []
         ## TODO write your code here (and change return)
         # Sadra: will use the `retriv` instead
         retrieved = SearchEngine.load(self.index_file).search(query=query, cutoff=k)

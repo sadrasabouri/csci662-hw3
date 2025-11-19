@@ -136,6 +136,8 @@ class SentenceTransformersSentenceEmbedding(RetrievalModel):
         :param k: the number of retrieval results
         :return: predictions list
         """
+        if k == 0:
+            return []
         query = self._clean_text(query)
         q_embedding = self.model.encode([query], convert_to_tensor=True, device=DEVICE)
         similarities = self.model.similarity(self.embeddings, q_embedding)
